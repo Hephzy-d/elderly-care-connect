@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18' // or any Node.js version you prefer
+        }
+    }
 
     stages {
         stage('Checkout') {
