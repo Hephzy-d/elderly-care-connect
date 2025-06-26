@@ -1,11 +1,18 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18' // or any Node.js version you prefer
-        }
-    }
+    agent any
 
     stages {
+        stage('Install Node.js') {
+            steps {
+                sh '''
+                    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+                    apt-get install -y nodejs
+                    node -v
+                    npm -v
+                '''
+            }
+        }
+
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/Hephzy-d/elderly-care-connect.git'
@@ -20,13 +27,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'npm build'
+                sh 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'npm test' // if you don’t have tests, remove this stage
+                sh 'npm test'
             }
         }
     }
